@@ -1,0 +1,7 @@
+devices:
+  - name: small-led
+    key: xxxxx
+    ip: 192.168.1.156
+  - name: uvb
+    key: xxxxx
+    ip: 192.168.1.106
