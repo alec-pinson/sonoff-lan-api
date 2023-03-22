@@ -81,26 +81,26 @@ func (apiServer APIServer) deviceList(w http.ResponseWriter) {
 		d.Status = ""
 		devices = append(devices, d)
 	}
-	writeResponse(w, devices)
+	writeResponse(w, devices, false)
 }
 
 func (apiServer APIServer) turnOn(w http.ResponseWriter, deviceName string) {
 	device, err := getDevice(deviceName)
 	if err.Error != "" {
-		writeResponse(w, err)
+		writeResponse(w, err, true)
 		return
 	}
 
 	if !time.Now().After(device.LastOn.Add(config.AntiSpam)) {
 		log.Println("Already turned on in the last 5 seconds")
-		writeResponse(w, device)
+		writeResponse(w, device, false)
 		return
 	}
 
 	turnOn(device.IP, device.Key)
 	device.Status = "on"
 	device.Key = ""
-	writeResponse(w, device)
+	writeResponse(w, device, false)
 
 	SetLastOn(deviceName)
 }
@@ -108,20 +108,20 @@ func (apiServer APIServer) turnOn(w http.ResponseWriter, deviceName string) {
 func (apiServer APIServer) turnOff(w http.ResponseWriter, deviceName string) {
 	device, err := getDevice(deviceName)
 	if err.Error != "" {
-		writeResponse(w, err)
+		writeResponse(w, err, true)
 		return
 	}
 
 	if !time.Now().After(device.LastOff.Add(config.AntiSpam)) {
 		log.Println("Already turned off in the last 5 seconds")
-		writeResponse(w, device)
+		writeResponse(w, device, false)
 		return
 	}
 
 	turnOff(device.IP, device.Key)
 	device.Status = "off"
 	device.Key = ""
-	writeResponse(w, device)
+	writeResponse(w, device, false)
 
 	SetLastOff(deviceName)
 }
