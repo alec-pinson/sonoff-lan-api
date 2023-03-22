@@ -5,21 +5,25 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 
 	"gopkg.in/yaml.v2"
 )
 
 type Config struct {
-	Debug   bool
-	File    string
-	Devices []Device `yaml:"devices"`
+	Debug    bool
+	File     string
+	Devices  []Device      `yaml:"devices"`
+	AntiSpam time.Duration `yaml:"antiDeviceSpam"`
 }
 
 type Device struct {
-	Name   string `yaml:"name"`
-	IP     string `yaml:"ip"`
-	Key    string `yaml:"key"`
-	Status string
+	Name    string `yaml:"name"`
+	IP      string `yaml:"ip"`
+	Key     string `yaml:"key"`
+	Status  string
+	LastOn  time.Time
+	LastOff time.Time
 }
 
 func (config Config) Load() Config {
@@ -36,6 +40,11 @@ func (config Config) Load() Config {
 	config.File = os.Getenv("CONFIG_FILE")
 	if config.File == "" {
 		config.File = "configuration.yaml"
+	}
+
+	// set default anti spam
+	if config.AntiSpam == 0 {
+		config.AntiSpam = 5 * time.Second
 	}
 
 	// load yaml from file
