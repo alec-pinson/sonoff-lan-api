@@ -54,7 +54,7 @@ func getDevice(name string) (Device, ErrorResponse) {
 			return d, err
 		}
 	}
-	err.Error = "Device not found."
+	err.Error = "Device '" + name + "' not found."
 	return device, err
 }
 

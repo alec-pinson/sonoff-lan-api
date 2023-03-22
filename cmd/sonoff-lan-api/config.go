@@ -14,7 +14,7 @@ type Config struct {
 	Debug    bool
 	File     string
 	Devices  []Device      `yaml:"devices"`
-	AntiSpam time.Duration `yaml:"antiDviceSpam"`
+	AntiSpam time.Duration `yaml:"antiDeviceSpam"`
 }
 
 type Device struct {
