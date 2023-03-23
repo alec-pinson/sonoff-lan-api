@@ -1,7 +1,9 @@
 devices:
   - name: small-led
-    key: xxxxx
+    # ENV VAR
+    # KEY_1: xxxx
     ip: 192.168.1.156
   - name: uvb
-    key: xxxxx
+    # ENV VAR
+    # KEY_2: xxxx
     ip: 192.168.1.106

@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -55,6 +56,13 @@ func (config Config) Load() Config {
 	err = yaml.Unmarshal(yamlFile, &config)
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	// loop through devices and load keys
+	for idx := range config.Devices {
+		if os.Getenv("KEY_"+strconv.Itoa(idx+1)) != "" {
+			config.Devices[idx].Key = os.Getenv("KEY_" + strconv.Itoa(idx+1))
+		}
 	}
 
 	log.Println("Configuration loaded...")

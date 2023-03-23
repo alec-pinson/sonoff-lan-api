@@ -30,6 +30,7 @@ type Response struct {
 	Seq      int    `json:"seq"`
 	Sequence string `json:"sequence"`
 	Error    int    `json:"error"`
+	Info     string `json:"info"`
 }
 
 func turnOn(deviceIp string, key string) {
@@ -81,15 +82,33 @@ func sendRequest(deviceIp string, body Request) (Response, error) {
 	if err := json.Unmarshal(respBody, &result); err != nil {
 		fmt.Println(err)
 	}
+	result.Info = GetInfo(result.Error)
 
 	// if non-200 status code or debug enabled then dump out request/response info
 	if config.Debug || resp.StatusCode != 200 || result.Error != 0 {
+
 		fmt.Printf("Request:\n %v\n\n", string(bodyJSON))
 
 		fmt.Printf("Response:\n %v\n\n", string(respBody))
 	}
 
 	return result, nil
+}
+
+func GetInfo(ErrorCode int) string {
+	switch ErrorCode {
+	case 0:
+		return "Success."
+	case 400:
+		return "The operation failed and the request was formatted incorrectly. The request body is not a valid JSON format."
+	case 401:
+		return "The operation failed and the request was unauthorized. Device information encryption is enabled on the device, but the request is not encrypted."
+	case 404:
+		return "The operation failed and the device does not exist. The device does not support the requested deviceid."
+	case 422:
+		return "The operation failed and the request parameters are invalid. For example, the device does not support setting specific device information."
+	}
+	return "Unknown error code."
 }
 
 // random hex code string, length 16

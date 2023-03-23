@@ -3,7 +3,12 @@
 
 ## Configuration
 Setup devices within `configuration.yaml`, see example.  
-Also an environment variable is required for `KEY` which is your device key.  
+Also an environment variable is required for each device `KEY_x` which is your device key.  
+Each key relates to the devices in the order within configuration.yaml.  
+```
+KEY_1=xxxxx
+KEY_2=xxxxx
+```
 
 ## API Endpoints
 
